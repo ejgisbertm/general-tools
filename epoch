@@ -1,0 +1,35 @@
+#!/bin/bash
+
+function show_help() {
+  echo "Shows time in UNIX Epoch format."
+  echo "Usage:"
+  printf '  %s [-m|--milliseconds]\n' "$(basename "$0")"
+  printf '  %s help\n' "$(basename "$0")"
+  cat <<EOF
+Where:
+  -m, --milliseconds  Displays the time in milliseconds (optional).
+  help     Shows this help message.
+Examples:
+EOF
+  printf '  %s                = %s\n' "$(basename "$0")" "$($0)"
+  printf '  %s -m             = %s\n' "$(basename "$0")" "$($0 -m)"
+  printf '  %s --milliseconds = %s\n' "$(basename "$0")" "$($0 --milliseconds)"
+}
+
+case $1 in
+-h | --help | help)
+  show_help
+  ;;
+-m | --milliseconds)
+  python3 -c 'import time; print(int(time.time() * 1000))'
+  ;;
+"")
+  date +%s
+  ;;
+*)
+  echo "Unknown option."
+  exit 1
+  ;;
+esac
+
+exit 0

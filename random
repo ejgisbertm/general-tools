@@ -1,0 +1,36 @@
+#!/bin/bash
+
+function show_help() {
+  echo "Generates a random number padded with zeroes (0)."
+  echo "Usage:"
+  printf '  %s [number]\n' "$(basename "$0")"
+  printf '  %s help\n' "$(basename "$0")"
+  cat <<EOF
+Where:
+  number  Specifies the upper limit to generate a random number (optional).
+          If no number is specified, the upper limit defaults to 9999.
+  help    Shows this help message.
+EOF
+  echo "Examples:"
+  for i in {1..3}; do
+    random_digits="$((RANDOM % 9000 + i))"
+    random_number=$($0 $random_digits)
+    printf '  %s %s = %s\n' "$(basename "$0")" "$random_digits" "$random_number"
+  done
+}
+
+case $1 in
+-h | --help | help)
+  show_help
+  ;;
+"")
+  digits=9999
+  printf '%04d\n' "$((RANDOM % digits + 1))"
+  ;;
+*)
+  digits="$1"
+  printf '%0*d\n' "${#digits}" "$((RANDOM % digits + 1))"
+  ;;
+esac
+
+exit 0
